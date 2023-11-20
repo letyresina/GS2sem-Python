@@ -11,6 +11,14 @@ import getpass # simular a entrada de senha de uma maneira segura (neste primeir
 import bcrypt # criptografar senha, a nível de garantir integridade e segurança do usuário
 import json # para abrir arquivos json externos da aplicação
 
+# Variáveis que precisam ser criadas antes da inicialização do programa
+#  Essa variável é somente um EXEMPLO não sendo necessariamente real -> por agora a nível de teste
+conveniosParceiros = {
+    'SUS',
+    'HapVida NotreDame Intermédica',
+    'Transmontano'
+}
+
 # Funções
 
 def cadastro():
@@ -45,13 +53,25 @@ def cadastro():
             profissionalSaude: int = int(input("Informe a opção aqui: "))
             if (profissionalSaude < 1) or (profissionalSaude > 2):
                 raise TypeError
-            elif profissionalSaude == 1:
+            elif profissionalSaude == 1: # caso sim
                 print("Qual a sua especialidade? Digite somente a especialidade, como exemplo Psicológo.")
                 especialidade: str = input()
                 print("Mais perguntas serão feitas ao decorrer da aplicação")
 
-                print("Se você for vinculado a algum convênio, digite o número de cadastro abaixo. Caso não, deixe em branco e aperte enter.")
-                convenio: int = input()
+                print("Confira nossos convênios parceiros")
+                for convenio in conveniosParceiros:
+                    print(f"- {convenio}")
+                
+                convenioUser: str = input("Informe seu convênio aqui (mesmo que não seja parceiro (mesmo que não seja parceiro e por extenso como 'hapvida notredame intermédica'): ").lower()
+
+                conveniosParceirosLower = {convenio.lower() for convenio in conveniosParceiros}
+
+                if convenioUser in conveniosParceirosLower:
+                    numConvenio: int = int(input("Digite seu número de cadastro: "))
+
+                else:
+                    print(f"O convênio {convenioUser} não faz parte dos nossos parceiros. Entretanto, te avisaremos caso a parceria seja feita!")
+                    numConvenio: int = int(input("Digite seu número de cadastro, facilitará caso a parceria seja realizada: "))
 
                 senha: str = getpass.getpass("Digite sua senha (ela está ocultada pela sua segurança): ")
                 time.sleep(1)
@@ -66,13 +86,26 @@ def cadastro():
                     "apelido": apelido,
                     "email": email,
                     "especialidade": especialidade,
-                    "convenio": convenio,
+                    "convenio": convenioUser,
+                    "numero convenio": numConvenio,
                     "senha": hashSenhaString
                 }
 
-            elif profissionalSaude == 2:
-                print("Se você for vinculado a algum convênio, digite o número de cadastro abaixo. Caso não, deixe em branco e aperte enter.")
-                convenio: int = input()
+            elif profissionalSaude == 2: # Caso não
+                print("Confira nossos convênios parceiros")
+                for convenio in conveniosParceiros:
+                    print(f"- {convenio}")
+                
+                convenioUser: str = input("Informe seu convênio aqui (mesmo que não seja parceiro e por extenso como 'hapvida notredame intermédica'): ").lower()
+
+                conveniosParceirosLower = {convenio.lower() for convenio in conveniosParceiros}
+
+                if convenioUser in conveniosParceirosLower:
+                    numConvenio: int = int(input("Digite seu número de cadastro: "))
+
+                else:
+                    print(f"O convênio {convenioUser} não faz parte dos nossos parceiros. Entretanto, te avisaremos caso a parceria seja feita!")
+                    numConvenio: int = int(input("Digite seu número de cadastro, facilitará caso a parceria seja realizada: "))
 
                 senha: str = getpass.getpass("Digite sua senha (ela está ocultada pela sua segurança): ")
                 time.sleep(1)
@@ -87,7 +120,8 @@ def cadastro():
                     "nome": nome,
                     "apelido": apelido,
                     "email": email,
-                    "convenio": convenio,
+                    "convenio": convenioUser,
+                    "cadastro convenio": numConvenio,
                     "senha": hashSenhaString
                 }
 
@@ -147,5 +181,5 @@ def login():
         print("A senha está incorreta! Tente novamente!")
         time.sleep(1)
         return False
-    
+
 login()

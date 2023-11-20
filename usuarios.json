@@ -1,17 +1,36 @@
 [
     {
-        "nome": "Teste",
+        "nome": "Teste Profissional",
         "apelido": "Teste",
-        "email": "teste",
+        "email": "testeprofissional",
         "especialidade": "Psicológo",
-        "convenio": "",
-        "senha": "$2b$12$GfvkYRbNcfPPeHzkr/ho0OBV.vzuyZnMsi9927A1WihfhAM0ImZTq"
+        "convenio": "amifacil",
+        "numero convenio": 1234,
+        "senha": "$2b$12$25M2fphkBI8I65OyZQm/Ku8kz.GM/ofCKgkybZG92PkV7FKnOlhp2"
     },
     {
-        "nome": "Teste2",
-        "apelido": "Teste2",
-        "email": "teste2",
-        "convenio": "",
-        "senha": "$2b$12$5YETDDUV/Dl4TBWqY..omeKctTAyu.C67U6IRzttB0pNuHEkMqEri"
+        "nome": "Teste Profissional Parceiro",
+        "apelido": "Teste",
+        "email": "testeprofissionalparceiro",
+        "especialidade": "Cardiologista",
+        "convenio": "sus",
+        "numero convenio": 1234,
+        "senha": "$2b$12$aDMbHBIfwRQMglsvxbF2w.5MoZU9j1ySdtJt6k.FJiWv5kwLahp9m"
+    },
+    {
+        "nome": "Teste Paciente",
+        "apelido": "Teste",
+        "email": "testepaciente",
+        "convenio": "amifacil",
+        "cadastro convenio": 12345,
+        "senha": "$2b$12$0vs.0RNqU5A/7UecggJdD.xFEyeJk73VZ7wuRVpmirAv1sqVYOjEO"
+    },
+    {
+        "nome": "Teste Paciente Parceiro",
+        "apelido": "Teste",
+        "email": "testepacienteparceiro",
+        "convenio": "hapvida notredame intermédica",
+        "cadastro convenio": 1234,
+        "senha": "$2b$12$KwpNK7Xee9YQ.lLy9VLmFe4AVndvis6ff/AS6GhQIF8GPQouOHNcG"
     }
 ]
