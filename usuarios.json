@@ -1,0 +1,17 @@
+[
+    {
+        "nome": "Teste",
+        "apelido": "Teste",
+        "email": "teste",
+        "especialidade": "Psicológo",
+        "convenio": "",
+        "senha": "$2b$12$GfvkYRbNcfPPeHzkr/ho0OBV.vzuyZnMsi9927A1WihfhAM0ImZTq"
+    },
+    {
+        "nome": "Teste2",
+        "apelido": "Teste2",
+        "email": "teste2",
+        "convenio": "",
+        "senha": "$2b$12$5YETDDUV/Dl4TBWqY..omeKctTAyu.C67U6IRzttB0pNuHEkMqEri"
+    }
+]

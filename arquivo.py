@@ -1,0 +1,151 @@
+'''
+    Autora: Leticia Resina
+    Objetivo do código: simular a inteligência artificial Julia do projeto MyHealth com funcionalidades 
+    reduzidas, mas que condizem o mais próximo da solução final.
+'''
+
+# Imports
+
+import time # intervalo de tempo para o usuário poder visualizar e processar as informações
+import getpass # simular a entrada de senha de uma maneira segura (neste primeiro momento)
+import bcrypt # criptografar senha, a nível de garantir integridade e segurança do usuário
+import json # para abrir arquivos json externos da aplicação
+
+# Funções
+
+def cadastro():
+    """
+        Função utilizada para simular o cadastro dentro da aplicação. Dentro dessa função, é simulado também
+        a questão da integridade e segurança dos dados do usuário, ocultando a senha e criptografando em seguida.
+    """
+
+    # abre o arquivo para manter os dados anteriormente inseridos
+    with open('usuarios.json', 'r', encoding='utf-8') as arquivo: 
+        usuarios = json.load(arquivo)
+
+    email: str = input("Digite seu e-mail: ")
+    usuarioExiste = False
+    for usuario in usuarios:
+         if usuario['email'] == email: # Caso o usuário já tenha seu email cadastrado em nosso sistema
+            usuarioExiste = True
+            print("O email já está registrado em nosso sistema! Por favor, realize seu login com email e senha!")
+            time.sleep(1)
+              
+    if not usuarioExiste: # Caso o usuário não tenha seu email cadastrado em nosso sistema
+        nome: str = input("Digite seu nome completo: ").title()
+        time.sleep(1)
+
+        apelido: str = input("Digite como deseja ser chamado durante a nossa conversa: ").title()
+        time.sleep(1)
+
+        print("Você é um profissional na área da saúde?")
+        print("\n 1 - Sim \n 2 - Não, sou paciente \n")
+
+        try: # Validação de erro evitando 
+            profissionalSaude: int = int(input("Informe a opção aqui: "))
+            if (profissionalSaude < 1) or (profissionalSaude > 2):
+                raise TypeError
+            elif profissionalSaude == 1:
+                print("Qual a sua especialidade? Digite somente a especialidade, como exemplo Psicológo.")
+                especialidade: str = input()
+                print("Mais perguntas serão feitas ao decorrer da aplicação")
+
+                print("Se você for vinculado a algum convênio, digite o número de cadastro abaixo. Caso não, deixe em branco e aperte enter.")
+                convenio: int = input()
+
+                senha: str = getpass.getpass("Digite sua senha (ela está ocultada pela sua segurança): ")
+                time.sleep(1)
+
+                salt = bcrypt.gensalt() # gera um salt aleatório
+
+                hashSenha = bcrypt.hashpw(senha.encode("utf-8"), salt)
+                hashSenhaString = hashSenha.decode('utf-8')
+
+                cadastro = {
+                    "nome": nome,
+                    "apelido": apelido,
+                    "email": email,
+                    "especialidade": especialidade,
+                    "convenio": convenio,
+                    "senha": hashSenhaString
+                }
+
+            elif profissionalSaude == 2:
+                print("Se você for vinculado a algum convênio, digite o número de cadastro abaixo. Caso não, deixe em branco e aperte enter.")
+                convenio: int = input()
+
+                senha: str = getpass.getpass("Digite sua senha (ela está ocultada pela sua segurança): ")
+                time.sleep(1)
+
+                salt = bcrypt.gensalt() # gera um salt aleatório
+
+                hashSenha = bcrypt.hashpw(senha.encode("utf-8"), salt)
+                hashSenhaString = hashSenha.decode('utf-8')
+
+                
+                cadastro = {
+                    "nome": nome,
+                    "apelido": apelido,
+                    "email": email,
+                    "convenio": convenio,
+                    "senha": hashSenhaString
+                }
+
+            usuarios.append(cadastro)
+
+            with open('usuarios.json', 'w', encoding='utf-8') as arquivoJSON:
+                    json.dump(usuarios, arquivoJSON, indent=4, ensure_ascii=False)
+
+            print("Cadastro feito com sucesso! Basta realizar seu login para acessar a Julia!")
+            time.sleep(1)
+            return cadastro
+
+        except ValueError: # caso valor diferente de inteiro
+            print("Por favor, informe somente números dentre as opções disponíveis!")
+            time.sleep(1)
+            
+        except TypeError: # caso opção não existente no sistema
+            print("Por favor, digite uma opção válida para prosseguir.")
+            time.sleep(1)
+
+def login():
+    """
+        Função criada para simular o login do usuário através do arquivo JSON contendo os dados dos usuários
+        e a senha criptografada, em que o próprio sistema consegue descriptografar e fazer o acesso caso os dados
+        estejam corretos.
+    """
+
+    with open('usuarios.json', 'r', encoding='utf-8') as arquivo: 
+        usuarios = json.load(arquivo)
+        
+    global apelidoUsuario # Para facilitar comunicação com o usuário logado
+    global emailUsuario # Para facilitar pegar o email nas demais funções
+
+    encontrouUsuario = False
+    senhaCorreta = False
+    
+    email: str = input("Digite seu email: ")
+
+    for usuario in usuarios:
+        emailUsuario = usuario['email']
+        if emailUsuario == email:
+            encontrouUsuario = True
+            senha: str = getpass.getpass("Digite sua senha: ")
+            if bcrypt.checkpw(senha.encode("utf-8"), usuario["senha"].encode("utf-8")):
+                apelidoUsuario = usuario["apelido"]
+                time.sleep(1)
+                print(f"Bem-vindo, {apelidoUsuario}!")  
+                senhaCorreta = True
+                return True
+            
+    if not encontrouUsuario: # caso não exista esse cadastro em nosso sistema
+        print("Email não cadastrado em nosso sistema. Por favor, verifique o email digitado.")
+        time.sleep(1)
+        return False
+    
+    if encontrouUsuario and not senhaCorreta: # Caso exista o email mas a senha está incorreta
+        print("A senha está incorreta! Tente novamente!")
+        time.sleep(1)
+        return False
+    
+login()
