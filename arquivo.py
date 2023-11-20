@@ -12,11 +12,21 @@ import bcrypt # criptografar senha, a nível de garantir integridade e seguranç
 import json # para abrir arquivos json externos da aplicação
 
 # Variáveis que precisam ser criadas antes da inicialização do programa
+
 #  Essa variável é somente um EXEMPLO não sendo necessariamente real -> por agora a nível de teste
 conveniosParceiros = {
     'SUS',
-    'HapVida NotreDame Intermédica',
+    'HapVida',
     'Transmontano'
+}
+
+# Variável com os gêneros que existem, pensando na questão de melhor atendimento tanto da IA quanto nos atendimentos -> facilita na visualização dos exames e prescição de receitas
+generos = {
+    "Homem cis",
+    "Homem trans",
+    "Mulher cis",
+    "Mulher trans",
+    "Não-binário"
 }
 
 # Funções
@@ -45,6 +55,13 @@ def cadastro():
 
         apelido: str = input("Digite como deseja ser chamado durante a nossa conversa: ").title()
         time.sleep(1)
+
+        print("Para algumas questões na área da saúde, como por exemplo, resultados de exames e prescrição de medicamentos, é necessário sabermos seu gênero para melhor conduzirmos seus resultados.")
+        print("Como você se identifica em termos de gênero?")
+        for genero in generos:
+            print(f"- {genero}")
+
+        genero: str = input("Digite uma das opções acima: ")
 
         print("Você é um profissional na área da saúde?")
         print("\n 1 - Sim \n 2 - Não, sou paciente \n")
@@ -85,6 +102,7 @@ def cadastro():
                     "nome": nome,
                     "apelido": apelido,
                     "email": email,
+                    "genero": genero,
                     "profissional": profissionalSaude,
                     "especialidade": especialidade,
                     "convenio": convenioUser,
@@ -121,6 +139,7 @@ def cadastro():
                     "nome": nome,
                     "apelido": apelido,
                     "email": email,
+                    "genero": genero,
                     "profissional": profissionalSaude,
                     "convenio": convenioUser,
                     "cadastro convenio": numConvenio,
@@ -186,6 +205,44 @@ def login():
         time.sleep(1)
         return False
 
+def menuOpcoesProfissional():
+    """
+        Função criada para o menu de opções para profissionais na área da saúde, facilitando o tratamento de erros
+        e deixar o código mais limpo na parte da programação principal.
+    """
+    print("Como podemos te ajudar hoje?")
+    print("\n 1 - Agenda de consultas; \n 2 - Resultado de exames de um paciente \n 3 - Lembretes de remédios \n 4 - Lembrete de agendas \n 5 - Dicas de saúde \n 6 - Feedback sobre a Julia \n 7 - Registro de sintomas \n 8 - Psicológos na sua área \n 9 - Encerrar Julia")
+    try:
+        opcao = int(input("Informe a opção desejada: "))
+        if (opcao < 1) or (opcao > 9):
+            raise TypeError
+        return opcao
+    except ValueError:
+        print("Por favor, informe somente números dentre as opções disponíveis!")
+        time.sleep(1)
+    except TypeError:
+        print("Por favor, digite uma opção válida para prosseguir.")
+        time.sleep(1)
+
+def menuOpcoesPaciente():
+    """
+        Função criada para o menu de opções para pacientes, facilitando o tratamento de erros
+        e deixar o código mais limpo na parte da programação principal.
+    """
+    print("Como podemos te ajudar hoje?")
+    print("\n 1 - Agendar consultas; \n 2 - Visualizar resultado de exames \n 3 - Lembretes de remédios \n 4 - Visualizar agenda de consultas \n 5 - Dicas de saúde \n 6 - Feedback sobre a Julia \n 7 - Registro de sintomas \n 8 - Psicológos na sua área \n 9 - Encerrar Julia")
+    try:
+        opcao = int(input("Informe a opção desejada: "))
+        if (opcao < 1) or (opcao > 9):
+            raise TypeError
+        return opcao
+    except ValueError:
+        print("Por favor, informe somente números dentre as opções disponíveis!")
+        time.sleep(1)
+    except TypeError:
+        print("Por favor, digite uma opção válida para prosseguir.")
+        time.sleep(1)
+
 # Programa principal
 
 '''
@@ -193,10 +250,12 @@ def login():
     segundo o estudo de caso e requisitos da aplicação definido pela PulseTech.
 '''
 
+logado = False # para facilitar construção do programa
+
 while logado == False:
     print("Olá! Seja bem vindo(a) à Julia! Para prosseguir, é necessário que você esteja logado em nosso sistema!")
     print("Escolha a opção abaixo para continuar")
-    print("\n 1 - Login \n 2 - Cadastro \n 3 - Encerrar à Tiana \n")
+    print("\n 1 - Login \n 2 - Cadastro \n 3 - Encerrar à Julia \n")
     try: # Tratamento de erros para evitar paradas inesperadas durante o programa
         opcaoInicial = int(input("Escolha uma das opções acima: "))
 
@@ -214,12 +273,8 @@ while logado == False:
             # Opção de cadastro
             cadastro()
             time.sleep(1)
-            print("Faça seu login, para sua segurança, para prosseguir com à Tiana")
-            time.sleep(1)
-            emailLogin: str = input("Digite seu email: ")
-            senhaLogin: str = getpass.getpass("Digite sua senha (ela está ocultada para sua segurança): ")
-            time.sleep(1)
-            loginUsuario = login(emailLogin, senhaLogin)
+            print("Faça seu login, para sua segurança, para prosseguir com à Julia")
+            loginUsuario = login()
             time.sleep(1)
             if loginUsuario == True: # caso deu tudo certo no login (não houve nenhum dado errado!)
                 logado = True        
@@ -236,3 +291,33 @@ while logado == False:
     except TypeError:
         print("Por favor, digite uma opção válida para prosseguir.")
         time.sleep(1)
+
+if logado == True:
+    print(f"Olá, {apelidoUsuario}. Seja bem-vindo(a) à Julia")
+    while True:
+        if profissional == 1:
+            opcao = menuOpcoesProfissional()
+        
+        elif profissional == 2:
+            opcao = menuOpcoesPaciente()
+            if opcao == 1:
+                print("Teste")
+            elif opcao == 2:
+                print("Teste")
+            elif opcao == 3:
+                print("Teste")
+            elif opcao == 4:
+                print("Teste")
+            elif opcao == 5:
+                print("Teste")
+            elif opcao == 6:
+                print("Teste")
+            elif opcao == 7:
+                print("Teste")
+            elif opcao == 8:
+                print("Teste")
+            elif opcao == 9:
+                print("Obrigada por utilizar a Julia!")
+                print("Deslogando...")
+                time.sleep(1)
+                break

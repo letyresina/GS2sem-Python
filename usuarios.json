@@ -1,1 +1,23 @@
-[]
+[
+    {
+        "nome": "Teste Profissional",
+        "apelido": "Teste",
+        "email": "testeprofissional@gmail.com",
+        "genero": "Mulher cis",
+        "profissional": 1,
+        "especialidade": "Psicológo",
+        "convenio": "hapvida",
+        "numero convenio": 12345,
+        "senha": "$2b$12$673t2uvj/gnJvg5yUFT8ZuenH6FtEn/ypOgkxxeHcLWZ/.nr2FWaC"
+    },
+    {
+        "nome": "Teste Paciente",
+        "apelido": "Teste",
+        "email": "testepaciente@gmail.com",
+        "genero": "Mulher cis ",
+        "profissional": 2,
+        "convenio": "sus",
+        "cadastro convenio": 12345,
+        "senha": "$2b$12$HvibCGVnBYGH3hUQnqAU5OkVXzFRr7vcfcMoRke4CEMcfWxLnUXSG"
+    }
+]
