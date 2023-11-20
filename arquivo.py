@@ -205,13 +205,42 @@ def login():
         time.sleep(1)
         return False
 
+def feedback():
+    """
+        Função criada para simular a inserção de feedback dos usuários e ficar salvo num banco de dados
+        (nesse caso, um arquivo JSON) de forma anônima, garantindo maior espaço para usuários se expressarem.
+    """
+    with open('feedback.json', 'r', encoding='utf-8') as arquivo:
+        feedbacks = json.load(arquivo)
+
+    print("Todos os feedbacks são anônimos, não se preocupe!")
+    feedbackUser: str = input("Informe seu feedback sobre a Julia aqui: ")
+
+    # Chave inteira para rotas favoritas -> para facilitar a identificação de cada rota
+    chave = 1
+
+    if feedbacks:
+        chavesInt = [int(chave) for chave in feedbacks.keys()]  # Preciso transformar em inteira para fazer a soma
+        chave = str(max(chavesInt) + 1)  # Depois de somar, transformo para string para cadastrar na nova rota
+
+    novoFeedback = {
+        "Feedback": feedbackUser
+    }
+
+    feedbacks[chave] = novoFeedback  # Cadastro a nova rota dentro da chave
+
+    with open('feedback.json', 'w', encoding='utf-8') as arquivo:
+        json.dump(feedbacks, arquivo, indent=4, ensure_ascii=False)
+
+    print("Feedback enviado com sucesso!")
+
 def menuOpcoesProfissional():
     """
         Função criada para o menu de opções para profissionais na área da saúde, facilitando o tratamento de erros
         e deixar o código mais limpo na parte da programação principal.
     """
     print("Como podemos te ajudar hoje?")
-    print("\n 1 - Agenda de consultas; \n 2 - Resultado de exames de um paciente \n 3 - Lembretes de remédios \n 4 - Lembrete de agendas \n 5 - Dicas de saúde \n 6 - Feedback sobre a Julia \n 7 - Registro de sintomas \n 8 - Psicológos na sua área \n 9 - Encerrar Julia")
+    print("\n 1 - Agendar uma consulta \n 2 - Resultado de exames de um paciente \n 3 - Lembretes de remédios \n 4 - Visualizar agenda \n 5 - Dicas de saúde \n 6 - Feedback sobre a Julia \n 7 - Registro de sintomas \n 8 - Psicológos na sua área \n 9 - Encerrar Julia")    
     try:
         opcao = int(input("Informe a opção desejada: "))
         if (opcao < 1) or (opcao > 9):
@@ -297,26 +326,65 @@ if logado == True:
     while True:
         if profissional == 1:
             opcao = menuOpcoesProfissional()
+            if opcao == 1:
+                # Agendar uma consulta para profissionais na área
+                print("Teste")
+            elif opcao == 2:
+                # Resultados de exame de um paciente
+                print("Teste")
+            elif opcao == 3:
+                # Lembretes de remédios
+                print("Teste")
+            elif opcao == 4:
+                # Visualizar agenda
+                print("Teste")
+            elif opcao == 5:
+                # Dicas de saúde
+                print("Teste")
+            elif opcao == 6:
+                # Feedback sobre a Julia
+                feedback()
+            elif opcao == 7:
+                # Registro de sintomas
+                print("Teste")
+            elif opcao == 8:
+                # Psicológos na sua área
+                print("Teste")
+            elif opcao == 9:
+                # Encerrando a Julia
+                print("Obrigada por utilizar a Julia!")
+                print("Deslogando...")
+                time.sleep(1)
+                break
         
         elif profissional == 2:
             opcao = menuOpcoesPaciente()
             if opcao == 1:
+                # Agendar uma consulta
                 print("Teste")
             elif opcao == 2:
+                # Visualizar resultados de exames
                 print("Teste")
             elif opcao == 3:
+                # Lembretes de remédios
                 print("Teste")
             elif opcao == 4:
+                # Visualizar consultas marcadas
                 print("Teste")
             elif opcao == 5:
+                # Dicas de saúde
                 print("Teste")
             elif opcao == 6:
-                print("Teste")
+                # Feedback sobre a Julia
+                feedback()
             elif opcao == 7:
+                # Registros de sintomas
                 print("Teste")
             elif opcao == 8:
+                # Psicológos na sua área
                 print("Teste")
             elif opcao == 9:
+                # Encerrando a Julia
                 print("Obrigada por utilizar a Julia!")
                 print("Deslogando...")
                 time.sleep(1)
