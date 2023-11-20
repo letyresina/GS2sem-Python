@@ -85,6 +85,7 @@ def cadastro():
                     "nome": nome,
                     "apelido": apelido,
                     "email": email,
+                    "profissional": profissionalSaude,
                     "especialidade": especialidade,
                     "convenio": convenioUser,
                     "numero convenio": numConvenio,
@@ -120,6 +121,7 @@ def cadastro():
                     "nome": nome,
                     "apelido": apelido,
                     "email": email,
+                    "profissional": profissionalSaude,
                     "convenio": convenioUser,
                     "cadastro convenio": numConvenio,
                     "senha": hashSenhaString
@@ -154,6 +156,7 @@ def login():
         
     global apelidoUsuario # Para facilitar comunicação com o usuário logado
     global emailUsuario # Para facilitar pegar o email nas demais funções
+    global profissional
 
     encontrouUsuario = False
     senhaCorreta = False
@@ -167,6 +170,7 @@ def login():
             senha: str = getpass.getpass("Digite sua senha: ")
             if bcrypt.checkpw(senha.encode("utf-8"), usuario["senha"].encode("utf-8")):
                 apelidoUsuario = usuario["apelido"]
+                profissional = usuario["profissional"]
                 time.sleep(1)
                 print(f"Bem-vindo, {apelidoUsuario}!")  
                 senhaCorreta = True
@@ -182,4 +186,53 @@ def login():
         time.sleep(1)
         return False
 
-login()
+# Programa principal
+
+'''
+    Enquanto o usuário não tiver logado, o usuário não poderá acessar as demais funcionalidades da aplicação
+    segundo o estudo de caso e requisitos da aplicação definido pela PulseTech.
+'''
+
+while logado == False:
+    print("Olá! Seja bem vindo(a) à Julia! Para prosseguir, é necessário que você esteja logado em nosso sistema!")
+    print("Escolha a opção abaixo para continuar")
+    print("\n 1 - Login \n 2 - Cadastro \n 3 - Encerrar à Tiana \n")
+    try: # Tratamento de erros para evitar paradas inesperadas durante o programa
+        opcaoInicial = int(input("Escolha uma das opções acima: "))
+
+        if (opcaoInicial < 1) or (opcaoInicial > 3):
+            raise TypeError
+        
+        elif opcaoInicial == 1:
+            # Opção de login
+            loginUsuario = login()
+            time.sleep(1)
+            if loginUsuario == True: # caso deu tudo certo no login (não houve nenhum dado errado!)
+                logado = True
+
+        elif opcaoInicial == 2:
+            # Opção de cadastro
+            cadastro()
+            time.sleep(1)
+            print("Faça seu login, para sua segurança, para prosseguir com à Tiana")
+            time.sleep(1)
+            emailLogin: str = input("Digite seu email: ")
+            senhaLogin: str = getpass.getpass("Digite sua senha (ela está ocultada para sua segurança): ")
+            time.sleep(1)
+            loginUsuario = login(emailLogin, senhaLogin)
+            time.sleep(1)
+            if loginUsuario == True: # caso deu tudo certo no login (não houve nenhum dado errado!)
+                logado = True        
+            
+        elif opcaoInicial == 3:
+            # Encerra a Julia sem continuar com as funcionalidades
+            print("Agradecemos por utilizar à Julia!")
+            break
+
+    except ValueError:
+        print("Por favor, informe somente números dentre as opções disponíveis!")
+        time.sleep(1)
+
+    except TypeError:
+        print("Por favor, digite uma opção válida para prosseguir.")
+        time.sleep(1)
