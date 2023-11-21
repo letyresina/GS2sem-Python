@@ -38,7 +38,7 @@ Para mais detalhes, consulte a documentação "GS-2sem-Python". Lá, possui dado
 
 ## Link do vídeo pitch 
 
-link aqui
+Link acesso ao vídeo no youtube: https://youtu.be/TXS3i5ioC0U
 
 ## Copyright
 

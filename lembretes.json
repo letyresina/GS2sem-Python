@@ -4,11 +4,13 @@
             "remedio": "dipirona",
             "titulo": "dor de cabeça",
             "horario": "08:00"
-        },
-        "2": {
-            "remedio": "lavitan",
-            "titulo": "cabelos e unhas",
-            "horario": "12:00"
+        }
+    },
+    "alucard@gmail.com": {
+        "1": {
+            "remedio": "Dipirona",
+            "titulo": "Dor de cabeça",
+            "horario": "08:00"
         }
     }
 }
