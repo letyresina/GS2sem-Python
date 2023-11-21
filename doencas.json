@@ -1,0 +1,9 @@
+{
+    "Virose": ["diarreia", "febre", "vômito", "enjoo", "falta de apetite", "dor muscular", "dor na barriga", "dor de cabeça", "secreção nasal", "tosse"],
+    "Amebíase": ["dor abdominal", "diarreia", "sangue nas fezes", "flatulência", "fadiga", "febre", "perda de apetite"],
+    "Criptococose pulmonar": ["febre", "tosse", "dor no peito", "perda de peso", "fraqueza"],
+    "Criptococose sistema nervoso central": ["dor de cabeça", "confusão mental", "febre", "rigidez na nuca", "naúsea", "alterações na visão", "vômito"],
+    "Criptococose cutânea": ["lesões avermelhadas", "erupções cutâneas vermelhas", "ulcerações", "massas subcutâneas"],
+    "Covid-19":["febre", "calafrios", "tosse", "dor de garganta", "dor de cabeça", "congestão nasal", "problemas no alfato", "problemas no paladar"]
+}
+  

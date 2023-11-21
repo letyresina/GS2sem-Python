@@ -8,6 +8,8 @@
 
 import time # intervalo de tempo para o usuário poder visualizar e processar as informações
 import getpass # simular a entrada de senha de uma maneira segura (neste primeiro momento)
+import requests # para acessar à API
+from datetime import datetime # para ajudar no registro de diagnóstico
 import bcrypt # criptografar senha, a nível de garantir integridade e segurança do usuário
 import json # para abrir arquivos json externos da aplicação
 
@@ -285,6 +287,106 @@ def dicasSaude():
         print(dicaS)
         time.sleep(1)
 
+def carregarDoencas():
+    with open("doencas.json", "r", encoding='utf-8') as file:
+        doencas = json.load(file)
+    return doencas
+
+def calcularSimilaridade(sintomasUsuario, sintomasDoenca):
+    intersecao = len(set(sintomasUsuario) & set(sintomasDoenca))
+    uniao = len(set(sintomasUsuario) | set(sintomasDoenca))
+    similaridade = intersecao / uniao if uniao > 0 else 0
+    return similaridade
+
+def diagnosticar(doencas, sintomasUsuario, limiar_minimo=3):
+    if len(sintomasUsuario) < limiar_minimo:
+        return "Insira pelo menos 3 sintomas para um diagnóstico mais preciso."
+
+    melhorDiagnostico = None
+    melhorSimilaridade = 0
+
+    for doenca, sintomasDoenca in doencas.items():
+        similaridade = calcularSimilaridade(sintomasUsuario, sintomasDoenca)
+
+        if similaridade > melhorSimilaridade:
+            melhorDiagnostico = doenca
+            melhorSimilaridade = similaridade
+
+    return melhorDiagnostico
+
+def salvarRegistro(cep, diagnostico):
+    try:
+        with open("registros.json", "r", encoding='utf-8') as file:
+            registros = json.load(file)
+    except FileNotFoundError:
+        registros = {}
+
+    data = datetime.now().strftime("%Y-%m-%d")
+
+    if cep not in registros:
+        registros[cep] = []
+
+    registros[cep].append({"data": data, "diagnostico": diagnostico})
+
+    with open("registros.json", "w", encoding='utf-8') as file:
+        json.dump(registros, file, indent=2)
+
+def preDiagnostico():
+    doencas = carregarDoencas()
+
+    print("Informe os sintomas que você está sentindo, separados por vírgula:")
+    sintomasUsuario = input().split(", ")
+
+    diagnostico = diagnosticar(doencas, sintomasUsuario)
+
+    if diagnostico:
+        if diagnostico.startswith("Insira pelo menos"):
+            print(diagnostico)
+        else:
+            print(f"Com base nos sintomas informados, você pode estar com {diagnostico}.")
+            time.sleep(1)
+            print("ATENÇÃO: NÃO SE AUTOMEDIQUE!")
+            time.sleep(1)
+            print("É aconselhável consultar um médico para um diagnóstico mais preciso.")
+            time.sleep(1)
+
+            print("Para nos auxiliar, caso seja um surto em sua cidade e possamos analisar de forma rápida, vamos adicionar em registros juntamente com a data.")
+            print("Fique tranquilo(a), será registrado de forma anônima, respeitando sua privacidade!. Tudo bem?")
+            time.sleep(1)
+            
+            try:
+                cep: str = input("Informe o CEP (SOMENTE NÚMEROS!): ")
+                url = f'https://viacep.com.br/ws/{cep}/json/'
+
+                resposta = requests.get(url)
+
+                if resposta.status_code == 200: # ou requests.codes.ok
+                    dicionario = resposta.json()
+                    print(f"Rua: {dicionario['logradouro']}")
+                    print(f"Cidade: {dicionario['localidade']}")
+                    print(f"Estado: {dicionario['uf']}")
+                    time.sleep(1)
+
+                    # Salvar o registro anonimamente
+                    salvarRegistro(cep, diagnostico)
+                    time.sleep(1)
+
+                elif resposta.status_code == 400: # Bad Request
+                    print("ERRO: O CEP deve ter 8 caracteres")
+                    time.sleep(1)
+
+            except requests.exceptions.RequestException as e:
+                print(f"ERRO: {e}")
+                print("Não foi possível acessar à API!")
+                time.sleep(1)
+
+            except Exception as mensagem:
+                print(f"ERRO: {mensagem}")
+                time.sleep(1)
+    else:
+        print("Não foi possível determinar um diagnóstico com base nos sintomas informados.")
+        time.sleep(1)
+
 def menuOpcoesProfissional():
     """
         Função criada para o menu de opções para profissionais na área da saúde, facilitando o tratamento de erros
@@ -397,7 +499,7 @@ if logado == True:
                 feedback()
             elif opcao == 7:
                 # Registro de sintomas
-                print("Teste")
+                preDiagnostico()
             elif opcao == 8:
                 # Psicológos na sua área
                 print("Teste")
@@ -430,7 +532,7 @@ if logado == True:
                 feedback()
             elif opcao == 7:
                 # Registros de sintomas
-                print("Teste")
+                preDiagnostico()
             elif opcao == 8:
                 # Psicológos na sua área
                 print("Teste")
