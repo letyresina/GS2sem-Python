@@ -29,6 +29,33 @@ generos = {
     "Não-binário"
 }
 
+# Variável com dicas de saúde física
+saudeFisica = {
+    "1. Alimentação balanceada: Consuma uma variedade de alimentos, incluindo frutas, vegetais, grãos integrais, proteínas magras e gorduras saudáveis para garantir a ingestão de nutrientes essenciais;",
+    "2. Atividade Física Regular: Pratique exercícios regularmente, incluindo atividades aeróbicas, treinamento de força e flexibilidade, para manter um corpo saudável e fortalecer o sistema cardiovascular e musculoesquelético;",
+    "3. Hidratação Adequada: Beba água suficiente ao longo do dia para manter o corpo hidratado e apoiar funções metabólicas adequadas;",
+    "4. Sono Reparador: Estabeleça uma rotina de sono consistente, visando 7-9 horas por noite, para promover a recuperação física e mental;",
+    "5. Check-ups Regulares: Faça exames médicos de rotina e consulte profissionais de saúde regularmente para prevenção e detecção precoce de possíveis problemas de saúde."
+}
+
+# Variável com dicas de saúde mental
+saudeMental = {
+    "1. Prática de Mindfulness: Dedique tempo para a prática de mindfulness ou meditação, o que pode ajudar a reduzir o estresse, melhorar a concentração e promover o bem-estar emocional;",
+    "2. Equilíbrio Trabalho-Vida: Estabeleça limites saudáveis entre trabalho e vida pessoal, reservando tempo para atividades recreativas e relacionamentos sociais;",
+    "3. Compartilhamento de Sentimentos: Não hesite em falar sobre seus sentimentos com amigos, familiares ou um profissional de saúde mental, promovendo a expressão emocional e o suporte necessário;"
+    "4. Atividades Recreativas: Reserve tempo para atividades que lhe tragam prazer e relaxamento, seja ler, ouvir música, praticar um hobby ou fazer atividades ao ar livre;",
+    "5. Definição de Metas Realistas: Estabeleça metas alcançáveis para evitar sobrecarga e promover um senso de realização. Lembre-se que cada pessoa é única!"
+}
+
+# Variável com dicas de saúde social
+saudeSocial = {
+    "1. Criação de Vínculos Sociais: Cultive relacionamentos positivos e significativos, mantendo contato regular com amigos, familiares e comunidade;",
+    "2. Empatia e Compaixão: Pratique a empatia ao se colocar no lugar dos outros e cultive a compaixão, promovendo um ambiente social mais saudável;",
+    "3. Participação em Grupos Sociais: Junte-se a grupos ou comunidades que compartilhem seus interesses, promovendo um senso de pertencimento e apoio mútuo;",
+    "4. Limitação do Uso de Redes Sociais: Utilize as redes sociais de maneira consciente, evitando comparações prejudiciais e limitando o tempo online para promover interações sociais face a face;",
+    "5. Voluntariado e Ativismo: Participe de atividades voluntárias ou de causas sociais que você valoriza, contribuindo para um senso de propósito e impacto positivo na comunidade."
+}
+
 # Funções
 
 def cadastro():
@@ -234,6 +261,30 @@ def feedback():
 
     print("Feedback enviado com sucesso!")
 
+def dicasSaude():
+    """
+        Função criada para facilitar a mostragem de dicas de saúde!
+    """
+    print("A saúde é dividida em 3 grandes áreas: física, mental e social.")
+    time.sleep(1)
+    print("Uma vida saudável significa ter o equiilibrio nessas 3 áreas em nossa vida. Vamos ver as dicas de cada uma delas para nos auxiliar no nosso dia a dia?")
+    time.sleep(0.5)
+
+    print("Dicas para saúde física:")
+    for dicaF in saudeFisica:
+        print(dicaF)
+        time.sleep(1)
+    
+    print("Dicas para saúde mental:")
+    for dicaM in saudeMental:
+        print(dicaM)
+        time.sleep(1)
+
+    print("Dicas para saúde social:")
+    for dicaS in saudeSocial:
+        print(dicaS)
+        time.sleep(1)
+
 def menuOpcoesProfissional():
     """
         Função criada para o menu de opções para profissionais na área da saúde, facilitando o tratamento de erros
@@ -340,7 +391,7 @@ if logado == True:
                 print("Teste")
             elif opcao == 5:
                 # Dicas de saúde
-                print("Teste")
+                dicasSaude()
             elif opcao == 6:
                 # Feedback sobre a Julia
                 feedback()
@@ -373,7 +424,7 @@ if logado == True:
                 print("Teste")
             elif opcao == 5:
                 # Dicas de saúde
-                print("Teste")
+                dicasSaude()
             elif opcao == 6:
                 # Feedback sobre a Julia
                 feedback()
