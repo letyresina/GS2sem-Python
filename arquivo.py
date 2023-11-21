@@ -733,16 +733,19 @@ if logado == True:
             opcao = menuOpcoesProfissional()
             if opcao == 1:
                 # Agendar uma consulta para profissionais na área
-                print("Teste")
+                print("Implementação futura!")
+                time.sleep(1)
             elif opcao == 2:
                 # Resultados de exame de um paciente
-                print("Teste")
+                print("Implementação futura!")
+                time.sleep(1)
             elif opcao == 3:
                 # Lembretes de remédios
                 gerenciarLembretes(emailUsuario)
             elif opcao == 4:
                 # Visualizar agenda
-                print("Teste")
+                print("Implementação futura!")
+                time.sleep(1)
             elif opcao == 5:
                 # Dicas de saúde
                 dicasSaude()
@@ -767,16 +770,19 @@ if logado == True:
             opcao = menuOpcoesPaciente()
             if opcao == 1:
                 # Agendar uma consulta
-                print("Teste")
+                print("Implementação futura!")
+                time.sleep(1)
             elif opcao == 2:
                 # Visualizar resultados de exames
-                print("Teste")
+                print("Implementação futura!")
+                time.sleep(1)
             elif opcao == 3:
                 # Lembretes de remédios
                 gerenciarLembretes(emailUsuario)
             elif opcao == 4:
                 # Visualizar consultas marcadas
-                print("Teste")
+                print("Implementação futura!")
+                time.sleep(1)
             elif opcao == 5:
                 # Dicas de saúde
                 dicasSaude()

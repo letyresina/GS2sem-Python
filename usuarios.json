@@ -19,5 +19,15 @@
         "convenio": "sus",
         "cadastro convenio": 12345,
         "senha": "$2b$12$HvibCGVnBYGH3hUQnqAU5OkVXzFRr7vcfcMoRke4CEMcfWxLnUXSG"
+    },
+    {
+        "nome": "Lorde Alucard",
+        "apelido": "Alucard",
+        "email": "alucard@gmail.com",
+        "genero": "Homem cis",
+        "profissional": 2,
+        "convenio": "hapvida",
+        "cadastro convenio": 22456,
+        "senha": "$2b$12$ZNLTGEkqH2qL02LtwdULFezn1znE0Dz3ocHsBSU/NwEC0iZpbumSK"
     }
 ]
