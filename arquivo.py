@@ -58,6 +58,22 @@ saudeSocial = {
     "5. Voluntariado e Ativismo: Participe de atividades voluntárias ou de causas sociais que você valoriza, contribuindo para um senso de propósito e impacto positivo na comunidade."
 }
 
+# Variável para simular psicológos próximos à sua área que atendem presencialmente, o objetivo futuro seja que sejam psicológos cadastrados
+psicologosPresencial = {
+    "Tatiana Rocha",
+    "Maria Fogueta",
+    "Lahgolas",
+    "Tabs"
+}
+
+# Variável para simular psicológos próximos à sua área (ou não) que atendem on-line, o objetivo futuro seja que sejam psicológos cadastrados
+psicologosOnline = {
+    "Tatiana Rocha",
+    "Leticia Resina",
+    "Catherine Pinkerton",
+    "Ana Carolina"
+}
+
 # Funções
 
 def cadastro():
@@ -293,12 +309,21 @@ def carregarDoencas():
     return doencas
 
 def calcularSimilaridade(sintomasUsuario, sintomasDoenca):
+    """
+        Função criada para transformar tanto o sintomas informados pelo usuário quanto os sintomas presentes
+        no arquivo de doencas.json em conjuntos, e fazer essa interseção entre esses conjuntos e comparar qual
+        doença tem mais similariedade com os sintomas colocados. Futuramente, mais doenças serão inseridas!
+    """
     intersecao = len(set(sintomasUsuario) & set(sintomasDoenca))
     uniao = len(set(sintomasUsuario) | set(sintomasDoenca))
     similaridade = intersecao / uniao if uniao > 0 else 0
     return similaridade
 
 def diagnosticar(doencas, sintomasUsuario, limiar_minimo=3):
+    """
+        É uma função criada para fazer esse diagnóstico em base da similariedade e o que for mais similar
+        entre eles.
+    """
     if len(sintomasUsuario) < limiar_minimo:
         return "Insira pelo menos 3 sintomas para um diagnóstico mais preciso."
 
@@ -315,6 +340,10 @@ def diagnosticar(doencas, sintomasUsuario, limiar_minimo=3):
     return melhorDiagnostico
 
 def salvarRegistro(cep, diagnostico):
+    """
+        Salvar a doença nos registros.json para caso mais doenças sejam inseridas, seria alarmante a situação
+        pros médicos e começar a pensar em soluções em base das datas.
+    """
     try:
         with open("registros.json", "r", encoding='utf-8') as file:
             registros = json.load(file)
@@ -332,6 +361,9 @@ def salvarRegistro(cep, diagnostico):
         json.dump(registros, file, indent=2)
 
 def preDiagnostico():
+    """
+        Função responsável por dar o pré-diagnóstico para os usuários com base de seus sintomas
+    """
     doencas = carregarDoencas()
 
     print("Informe os sintomas que você está sentindo, separados por vírgula:")
@@ -386,6 +418,37 @@ def preDiagnostico():
     else:
         print("Não foi possível determinar um diagnóstico com base nos sintomas informados.")
         time.sleep(1)
+
+def encontrarPsicologo():
+    """
+        Função criada para simular a busca de psicológos na área informada pelo usuário através de seu CEP.
+    """
+    try:
+        cep = input("Informe o CEP (SOMENTE NÚMEROS!): ")
+        url = f'https://viacep.com.br/ws/{cep}/json/'
+
+        resposta = requests.get(url)
+
+        if resposta.status_code == 200: # ou requests.codes.ok
+            dicionario = resposta.json()
+            print(f" Psicológos próximos ao CEP:{dicionario['cep']}")
+            print("Psicológos presencial")
+            for psicologo in psicologosPresencial:
+                print(psicologo)
+            print("-----------------------------------------------------")
+            print("Psicológos on-line")
+            for psicologo in psicologosOnline:
+                print(psicologo)        
+
+        elif resposta.status_code == 400: # Bad Request
+            print("ERRO: O CEP deve ter 8 caracteres")
+
+    except ConnectionError:
+        print("ERRO: Não foi possível acessar à API!")
+
+    except Exception as mensagem:
+        print(f"ERRO: {mensagem}")
+
 
 def menuOpcoesProfissional():
     """
@@ -502,7 +565,8 @@ if logado == True:
                 preDiagnostico()
             elif opcao == 8:
                 # Psicológos na sua área
-                print("Teste")
+                encontrarPsicologo()
+                time.sleep(1)
             elif opcao == 9:
                 # Encerrando a Julia
                 print("Obrigada por utilizar a Julia!")
@@ -535,7 +599,8 @@ if logado == True:
                 preDiagnostico()
             elif opcao == 8:
                 # Psicológos na sua área
-                print("Teste")
+                encontrarPsicologo()
+                time.sleep(1)
             elif opcao == 9:
                 # Encerrando a Julia
                 print("Obrigada por utilizar a Julia!")
