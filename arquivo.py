@@ -449,6 +449,195 @@ def encontrarPsicologo():
     except Exception as mensagem:
         print(f"ERRO: {mensagem}")
 
+def carregarLembretes():
+    """
+        Função para carregar os lembretes de remédios do arquivo JSON.
+    """
+    try:
+        with open('lembretes.json', 'r', encoding='utf-8') as arquivo:
+            lembretes = json.load(arquivo)
+    except FileNotFoundError:
+        lembretes = {}
+    return lembretes
+
+def salvarLembretes(lembretes):
+    """
+        Função para salvar os lembretes de remédios no arquivo JSON
+    """
+    with open('lembretes.json', 'w', encoding='utf-8') as arquivo:
+        json.dump(lembretes, arquivo, indent=4, ensure_ascii=False)
+
+def adicionarLembrete(lembretes, email, remedio, titulo, horario):
+    """
+        Função para adicionar um lembrete de remédio
+    """
+    if email not in lembretes:
+        lembretes[email] = {}  
+
+    # Obter a próxima chave única inteira
+    chave = 1
+    if lembretes[email]:
+        chavesInt = [int(chave) for chave in lembretes[email].keys()]
+        chave = str(max(chavesInt) + 1)
+
+    # Cria o lembrete de remédio
+    lembrete = {
+        "remedio": remedio,
+        "titulo": titulo,
+        "horario": horario
+    }
+
+    lembretes[email][chave] = lembrete  
+
+    salvarLembretes(lembretes)
+
+    print("Lembrete salvo com sucesso!")
+    time.sleep(1)
+
+def visualizarLembretes(lembretes, email):
+    """
+        Função para visualizar lembretes de remédios de um usuário
+    """
+    if email in lembretes and lembretes[email]:
+        print(f"\nLembretes de remédios:")
+        for chave, lembrete in lembretes[email].items():
+            print(f"{lembrete['titulo']} - Remédio: {lembrete['remedio']} - Horário: {lembrete['horario']}")
+            time.sleep(1)
+    else:
+        print(f"Nenhum lembrete de remédio encontrado! Que tal cadastrar alguns?")
+        time.sleep(1)
+
+def editarLembretes(lembretes, email):
+    """
+        Função criada para editar lembretes já pré-cadastrados em nosso sistema.
+    """
+    if email not in lembretes:
+        print("Você não possui lembretes cadastrados! Que tal cadastrar alguns?")
+        time.sleep(1)
+    else:
+        tituloEditar = input("Informe o título que deseja editar: ")
+        lembreteEncontrado = False
+        time.sleep(1)
+
+        for chave, lembrete in lembretes[email].items():
+            if lembrete['titulo'] == tituloEditar:
+                lembreteEncontrado = True
+                print("O que você deseja editar para editar?")
+                print("\n 1 - Titulo \n 2 - Remédio \n 3 - Horário \n")
+                try:
+                    opcaoEditar = int(input("Digite a opção aqui: "))
+
+                    if (opcaoEditar < 1) or (opcaoEditar > 3):
+                        raise TypeError
+                    
+                    elif opcaoEditar == 1:
+                        novoTitulo = input("Digite o novo título do remédio: ")
+                        lembrete['titulo'] = novoTitulo
+                        time.sleep(1)
+
+                    elif opcaoEditar == 2:
+                        novoRemedio = input("Informe o novo remédio: ")
+                        lembrete['remedio'] = novoRemedio
+                        time.sleep(1)
+
+                    elif opcaoEditar == 3:
+                        novoHorario = input("Informe o novo horário: ")
+                        lembrete['horario'] = novoHorario
+                        time.sleep(1)
+                    
+                    salvarLembretes(lembretes)
+                    print("Lembrete alterado com sucesso!")
+                    time.sleep(1)
+
+                except ValueError: # caso valor diferente de inteiro
+                    print("Por favor, informe somente números dentre as opções disponíveis!")
+                    time.sleep(1)
+                    
+                except TypeError: # caso opção não existente no sistema
+                    print("Por favor, digite uma opção válida para prosseguir.")
+                    time.sleep(1)
+
+        if not lembreteEncontrado:
+            print(f"O título {tituloEditar} não foi encontrado! Tente novamente")
+            time.sleep(1)
+
+def excluirLembrete(lembretes, email):
+    """
+        Função criada para excluir lembretes pré-cadastrados em nosso sistema.
+    """
+
+    if emailUsuario not in lembretes: # Caso o usuário não possua nenhuma lembrete favorita
+        print("Você não possui lembretes cadastrados! Que tal cadastrar alguns?")
+        time.sleep(1)
+
+    else: # Caso possua
+        encontrouLembrete = False
+        titulo = input("Qual título do lembrete que você deseja excluir? \n")
+        chaveRemover = []
+        for chave, item in lembretes[email].items():
+            if item["titulo"] == titulo:
+                encontrouLembrete = True # se encontra, passa a ser verdadeiro para prosseguir
+                print(f"Você tem certeza que deseja remover {titulo} de seus lembretes?") 
+                # Para o usuário ter certeza e não excluir nada sem desejar
+                print("\n 1 - Sim \n 2 - Não \n")
+
+                try: # tratamento de erros para evitar paradas indesejadas durante o programa
+                    opcaoCerteza = int(input("Informe a opção desejada aqui: "))
+                    if (opcaoCerteza < 1) or (opcaoCerteza > 2):
+                        raise TypeError
+                    
+                    elif opcaoCerteza == 1:
+                            chaveRemover.append(chave)
+
+                    elif opcaoCerteza == 2:
+                        print("Nenhum lembrete foi removida!")
+                        time.sleep(1)
+
+                except ValueError: # caso valor diferente de inteiro
+                    print("Por favor, informe somente números dentre as opções disponíveis!")
+                    time.sleep(1)
+                    
+                except TypeError: # caso opção não existente no sistema
+                    print("Por favor, digite uma opção válida para prosseguir.")
+                    time.sleep(1)
+
+        for chave in chaveRemover:
+            del lembretes[emailUsuario][chave]
+            print("Lembrete removido com sucesso!")
+            time.sleep(1)
+
+        if not lembretes[emailUsuario]: 
+            del lembretes[emailUsuario] # Deleta do arquivo JSON
+
+        if not encontrouLembrete: # caso o lembrete chamada não exista no sistema
+            print(f"O lembrete não existe! Tente novamente, ou cadastre em nosso sistema para editar/excluir.")
+
+    salvarLembretes(lembretes)
+
+def gerenciarLembretes(email):
+    """
+        Função principal para gerenciar os lembretes de remédios
+    """
+    lembretes = carregarLembretes()
+
+    while True:
+        print("\n 1 - Adicionar lembrete de remédio \n 2 - Visualizar lembretes de remédios \n 3 - Editar lembrete \n 4 - Excluir lembrete \n 5 - Voltar ao menu principal \n")
+        opcaoLembrete = input("Escolha uma opção: ")
+        if opcaoLembrete == '1':
+            remedio = input("Digite o remédio: ")
+            titulo = input("Digite o título do lembrete: ")
+            horario = input("Digite o horário do lembrete (ex: 08:00): ")
+            adicionarLembrete(lembretes, email, remedio, titulo, horario)
+        elif opcaoLembrete == '2':
+            visualizarLembretes(lembretes, email)
+        elif opcaoLembrete == '3':
+            editarLembretes(lembretes, email)
+        elif opcaoLembrete == '4':
+            excluirLembrete(lembretes, email)
+        elif opcaoLembrete == '5':
+            break
+        else:
+            print("Opção inválida. Por favor, escolha uma opção válida.")
 
 def menuOpcoesProfissional():
     """
@@ -550,7 +739,7 @@ if logado == True:
                 print("Teste")
             elif opcao == 3:
                 # Lembretes de remédios
-                print("Teste")
+                gerenciarLembretes(emailUsuario)
             elif opcao == 4:
                 # Visualizar agenda
                 print("Teste")
@@ -584,7 +773,7 @@ if logado == True:
                 print("Teste")
             elif opcao == 3:
                 # Lembretes de remédios
-                print("Teste")
+                gerenciarLembretes(emailUsuario)
             elif opcao == 4:
                 # Visualizar consultas marcadas
                 print("Teste")
